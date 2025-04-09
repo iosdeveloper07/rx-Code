@@ -44,10 +44,8 @@ class FavoritesViewModel {
              guard let self = self else { return }
              switch changes {
              case .initial(let favPosts):
-                 print("\(favPosts.count)")
                  self.favoritePosts.accept(Array(favPosts))
              case .update(let favPosts, _, _, _):
-                 print("\(favPosts.count)")
                  self.favoritePosts.accept(Array(favPosts))
              case .error(let error):
                  print("\(error.localizedDescription)")

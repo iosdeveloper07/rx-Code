@@ -53,9 +53,7 @@ class PostsViewController: UIViewController {
 
         tableView.rx.modelSelected(Post.self)
             .subscribe(onNext: { [weak self] post in
-                print("Selected post: \(post.id)")
                 self?.viewModel.toggleFavorite(postId: post.id)
-                // Deselect row visually
                 if let selectedIndexPath = self?.tableView.indexPathForSelectedRow {
                     self?.tableView.deselectRow(at: selectedIndexPath, animated: true)
                 }
@@ -70,7 +68,7 @@ class PostsViewController: UIViewController {
                     self?.activityIndicator.startAnimating()
                 } else {
                     self?.activityIndicator.stopAnimating()
-                    self?.refreshControl.endRefreshing() // End pull-to-refresh animation
+                    self?.refreshControl.endRefreshing()
                 }
             })
             .disposed(by: disposeBag)
