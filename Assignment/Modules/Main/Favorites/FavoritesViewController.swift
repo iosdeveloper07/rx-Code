@@ -43,6 +43,7 @@ class FavoritesViewController: UIViewController {
                 guard let self = self else { return }
                  let postToDelete = self.viewModel.favoritePosts.value[indexPath.row]
                  self.viewModel.unfavoritePost(postId: postToDelete.id)
+                 self.showFavouritePostDeletedAlert()
             })
             .disposed(by: disposeBag)
     }
@@ -74,5 +75,11 @@ class FavoritesViewController: UIViewController {
                  self?.tableView.deselectRow(at: indexPath, animated: true)
              })
              .disposed(by: disposeBag)
+    }
+    
+    private func showFavouritePostDeletedAlert() {
+        let alert = UIAlertController(title: "Success", message: "Post Deleted Suucessfully !!", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
 }

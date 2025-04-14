@@ -17,7 +17,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9QT-fq-hF4">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9QT-fq-hF4">
                         <rect key="frame" x="0.0" y="0.0" width="220" height="25"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="220" id="ErI-O2-lXD"/>
@@ -27,9 +27,8 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ODR-ZZ-ztm">
-                        <rect key="frame" x="0.0" y="30" width="220" height="25"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ODR-ZZ-ztm">
+                        <rect key="frame" x="0.0" y="30" width="248" height="25"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -43,10 +42,14 @@
                     </imageView>
                 </subviews>
                 <constraints>
+                    <constraint firstAttribute="bottom" secondItem="ODR-ZZ-ztm" secondAttribute="bottom" id="8kD-eG-iXr"/>
+                    <constraint firstItem="ODR-ZZ-ztm" firstAttribute="leading" secondItem="9QT-fq-hF4" secondAttribute="leading" id="L8M-Wi-L5B"/>
                     <constraint firstItem="9QT-fq-hF4" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="OoO-BQ-Lts"/>
                     <constraint firstAttribute="trailing" secondItem="hqc-F6-ax9" secondAttribute="trailing" constant="5" id="QiA-A3-JcG"/>
-                    <constraint firstItem="9QT-fq-hF4" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Qq3-gz-YqH"/>
+                    <constraint firstItem="9QT-fq-hF4" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="Qq3-gz-YqH"/>
+                    <constraint firstItem="ODR-ZZ-ztm" firstAttribute="top" secondItem="9QT-fq-hF4" secondAttribute="bottom" constant="5" id="X7k-Ct-EZG"/>
                     <constraint firstAttribute="bottom" secondItem="hqc-F6-ax9" secondAttribute="bottom" constant="5" id="Ys7-0y-EUn"/>
+                    <constraint firstItem="hqc-F6-ax9" firstAttribute="leading" secondItem="ODR-ZZ-ztm" secondAttribute="trailing" constant="8" id="ZUD-er-TaB"/>
                     <constraint firstItem="hqc-F6-ax9" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="gsR-PS-1aM"/>
                 </constraints>
             </tableViewCellContentView>

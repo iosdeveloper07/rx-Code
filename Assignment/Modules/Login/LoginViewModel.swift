@@ -9,6 +9,8 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+
+
 class LoginViewModel {
     let email = BehaviorRelay<String>(value: "")
     let password = BehaviorRelay<String>(value: "")
@@ -24,7 +26,7 @@ class LoginViewModel {
     init() {
         isEmailValid = email.asObservable()
             .map { Validators.isValidEmail($0) }
-            .share(replay: 1) 
+            .share(replay: 1)
 
         isPasswordValid = password.asObservable()
             .map { Validators.isValidPassword($0) }

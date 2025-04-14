@@ -56,6 +56,7 @@ class PostsViewController: UIViewController {
                 self?.viewModel.toggleFavorite(postId: post.id)
                 if let selectedIndexPath = self?.tableView.indexPathForSelectedRow {
                     self?.tableView.deselectRow(at: selectedIndexPath, animated: true)
+                    self?.showFavouritePostAddedAlert()
                 }
             })
             .disposed(by: disposeBag)
@@ -93,7 +94,6 @@ class PostsViewController: UIViewController {
     }
 
     @objc private func logoutTapped() {
-         print("Logout tapped")
          viewModel.logout()
     }
 
@@ -115,6 +115,12 @@ class PostsViewController: UIViewController {
          window.makeKeyAndVisible()
          UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil, completion: nil)
      }
+    
+    private func showFavouritePostAddedAlert() {
+        let alert = UIAlertController(title: "Success", message: "Post Added In Favourite List Successfully !!", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
 
     private func showErrorAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)

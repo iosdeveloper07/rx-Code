@@ -13,7 +13,6 @@ import RealmSwift
 class FavoritesViewModel {
 
     let favoritePosts: BehaviorRelay<[Post]> = BehaviorRelay(value: [])
-    let isEmpty: Observable<Bool>
 
     private let databaseService: DatabaseService
     private let disposeBag = DisposeBag()
@@ -21,10 +20,6 @@ class FavoritesViewModel {
 
     init(databaseService: DatabaseService = .shared) {
         self.databaseService = databaseService
-
-        isEmpty = favoritePosts.asObservable()
-             .map { $0.isEmpty }
-             .distinctUntilChanged()
 
         observeFavoriteChanges()
     }
