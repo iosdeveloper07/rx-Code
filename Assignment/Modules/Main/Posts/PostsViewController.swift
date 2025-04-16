@@ -14,7 +14,8 @@ class PostsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 
-    private let viewModel = PostsViewModel()
+    private var postStorage: PostStorageProtocol = DatabaseService.shared
+    private var viewModel: PostsViewModel!
     private let disposeBag = DisposeBag()
     private let refreshControl = UIRefreshControl()
 
@@ -24,6 +25,11 @@ class PostsViewController: UIViewController {
         setupTableView()
         setupBindings()
         viewModel.fetchInitialData()
+    }
+    
+    func inject(postStorage: PostStorageProtocol) {
+        self.postStorage = postStorage
+        self.viewModel = PostsViewModel(postStorage: postStorage)
     }
 
     private func setupUI() {
@@ -35,8 +41,8 @@ class PostsViewController: UIViewController {
     }
 
     private func setupTableView() {
-         let nib = UINib(nibName: PostTableViewCell.identifier, bundle: nil)
-         tableView.register(nib, forCellReuseIdentifier: PostTableViewCell.identifier)
+        let nib = UINib(nibName: PostTableViewCell.identifier, bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: PostTableViewCell.identifier)
 
         tableView.rowHeight = UITableView.automaticDimension
         tableView.rowHeight = 100.0 
@@ -56,7 +62,6 @@ class PostsViewController: UIViewController {
                 self?.viewModel.toggleFavorite(postId: post.id)
                 if let selectedIndexPath = self?.tableView.indexPathForSelectedRow {
                     self?.tableView.deselectRow(at: selectedIndexPath, animated: true)
-                    self?.showFavouritePostAddedAlert()
                 }
             })
             .disposed(by: disposeBag)
@@ -115,12 +120,6 @@ class PostsViewController: UIViewController {
          window.makeKeyAndVisible()
          UIView.transition(with: window, duration: 0.3, options: .transitionCrossDissolve, animations: nil, completion: nil)
      }
-    
-    private func showFavouritePostAddedAlert() {
-        let alert = UIAlertController(title: "Success", message: "Post Added In Favourite List Successfully !!", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        present(alert, animated: true)
-    }
 
     private func showErrorAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)

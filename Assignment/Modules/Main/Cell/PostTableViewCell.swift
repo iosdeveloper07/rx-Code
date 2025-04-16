@@ -17,20 +17,23 @@ class PostTableViewCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        favoriteIndicatorImageView?.tintColor = .systemYellow
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
         titleLabel.text = nil
         bodyLabel.text = nil
-        favoriteIndicatorImageView.isHidden = true
     }
 
-    func configure(with post: Post) {
+    func configure(with post: Post, isFavouriteHidden: Bool = false) {
         titleLabel.text = post.title
         bodyLabel.text = post.body
-        favoriteIndicatorImageView.isHidden = !post.isFavorite
+        if isFavouriteHidden {
+            favoriteIndicatorImageView.isHidden = true
+        } else {
+            let imageName = post.isFavorite ? "heart" : "unselected"
+            favoriteIndicatorImageView.image = UIImage(named: imageName)
+        }
         accessoryType = .none
     }
 }
