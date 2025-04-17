@@ -18,16 +18,15 @@ class PostsViewModel {
     let navigateToLogin = PublishSubject<Void>()
     
     private let networkService: NetworkService
-    private let databaseService: DatabaseService
+    private let postStorage: PostStorageProtocol
     private let disposeBag = DisposeBag()
     private var notificationToken: NotificationToken?
 
-    init(networkService: NetworkService = .shared, databaseService: DatabaseService = .shared) {
+    init(networkService: NetworkService = .shared, postStorage: PostStorageProtocol = DatabaseService.shared) {
         self.networkService = networkService
-        self.databaseService = databaseService
+        self.postStorage = postStorage
         observeDatabaseChanges()
     }
-
 
     func fetchInitialData() {
         fetchPostsFromNetwork()
@@ -38,29 +37,31 @@ class PostsViewModel {
     }
 
     func toggleFavorite(postId: Int) {
-        databaseService.toggleFavoriteStatus(postId: postId)
+        postStorage.toggleFavoriteStatus(postId: postId)
     }
 
     func logout() {
         UserDefaultsManager.shared.isLoggedIn = false
         navigateToLogin.onNext(())
     }
-
+    
     private func observeDatabaseChanges() {
-        let results = databaseService.realm?.objects(Post.self).sorted(byKeyPath: "id", ascending: true) ?? nil
-        guard let allPostsResults = results else { return }
-
-        notificationToken = allPostsResults.observe { [weak self] (changes: RealmCollectionChange) in
-            guard let self = self else { return }
-            switch changes {
-            case .initial(let postsResult):
-                self.posts.accept(Array(postsResult))
-            case .update(let postsResult, _, _, _):
-                self.posts.accept(Array(postsResult))
-            case .error(let error):
-                self.error.onNext("Failed to load posts from database.")
-            }
-        }
+        postStorage.getAllPosts()
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] results in
+                self?.notificationToken?.invalidate()
+                self?.notificationToken = results.observe { [weak self] changes in
+                    guard let self = self else { return }
+                    switch changes {
+                    case .initial(let postsResult),
+                         .update(let postsResult, _, _, _):
+                        self.posts.accept(Array(postsResult))
+                    case .error:
+                        self.error.onNext("Failed to load posts from database.")
+                    }
+                }
+            })
+            .disposed(by: disposeBag)
     }
 
     private func fetchPostsFromNetwork() {
@@ -71,7 +72,7 @@ class PostsViewModel {
             .observe(on: MainScheduler.instance)
             .subscribe(
                 onNext: { [weak self] postsDecodable in
-                    self?.databaseService.saveOrUpdatePosts(postsDecodable)
+                    self?.postStorage.saveOrUpdatePosts(postsDecodable)
                     self?.isLoading.accept(false)
                 },
                 onError: { [weak self] error in

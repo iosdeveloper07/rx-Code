@@ -14,8 +14,14 @@ class FavoritesViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var emptyStateLabel: UILabel!
 
-    private let viewModel = FavoritesViewModel()
+    private var postStorage: PostStorageProtocol = DatabaseService.shared
+    private var viewModel = FavoritesViewModel()
     private let disposeBag = DisposeBag()
+    
+    func inject(postStorage: PostStorageProtocol) {
+        self.postStorage = postStorage
+        self.viewModel = FavoritesViewModel(postStorage: postStorage)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +41,7 @@ class FavoritesViewController: UIViewController {
         tableView.register(nib, forCellReuseIdentifier: PostTableViewCell.identifier)
 
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.rowHeight = 100.0 
+        tableView.estimatedRowHeight = 100.0
         tableView.tableFooterView = UIView()
 
         tableView.rx.itemDeleted
@@ -52,7 +58,7 @@ class FavoritesViewController: UIViewController {
         viewModel.favoritePosts
             .observe(on: MainScheduler.instance)
             .bind(to: tableView.rx.items(cellIdentifier: PostTableViewCell.identifier, cellType: PostTableViewCell.self)) { (row, post, cell) in
-                cell.configure(with: post)
+                cell.configure(with: post, isFavourite: true)
             }
             .disposed(by: disposeBag)
         
@@ -78,7 +84,7 @@ class FavoritesViewController: UIViewController {
     }
     
     private func showFavouritePostDeletedAlert() {
-        let alert = UIAlertController(title: "Success", message: "Post Deleted Suucessfully !!", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Success", message: "Post Removed From Favourites Suucessfully !!", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
     }

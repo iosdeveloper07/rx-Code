@@ -10,7 +10,17 @@ import RealmSwift
 import RxSwift
 import RxRealm
 
-class DatabaseService {
+protocol PostStorageProtocol {
+    var realm: Realm? { get }
+    func saveOrUpdatePosts(_ posts: [PostDecodable])
+    func getAllPosts() -> Observable<Results<Post>>
+    func getFavoritePosts() -> Observable<Results<Post>>
+    func setFavoriteStatus(postId: Int, isFavorite: Bool)
+    func toggleFavoriteStatus(postId: Int)
+    func deleteAllPosts()
+}
+
+class DatabaseService: PostStorageProtocol {
     static let shared = DatabaseService()
     var realm: Realm?
 
@@ -25,16 +35,14 @@ class DatabaseService {
             )
             Realm.Configuration.defaultConfiguration = config
             realm = try Realm()
-            print("Realm Path: \(realm?.configuration.fileURL?.absoluteString ?? "Not found")")
         } catch let error {
-            print("Error initializing Realm: \(error.localizedDescription)")
+            print("\(error.localizedDescription)")
             realm = nil
         }
     }
 
     func saveOrUpdatePosts(_ postsDecodable: [PostDecodable]) {
         guard let realm = realm else {
-            print("Realm not available")
             return
         }
         do {
@@ -99,6 +107,7 @@ class DatabaseService {
                 post.isFavorite = isFavorite
             }
         } catch let error {
+            print("\(error.localizedDescription)")
         }
     }
 
