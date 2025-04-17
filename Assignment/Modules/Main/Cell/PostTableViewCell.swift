@@ -25,10 +25,11 @@ class PostTableViewCell: UITableViewCell {
         bodyLabel.text = nil
     }
 
-    func configure(with post: Post, isFavourite: Bool = false) {
+
+    func configure(with post: Post, isFavouriteHidden: Bool = false) {
         titleLabel.text = post.title
         bodyLabel.text = post.body
-        if isFavourite {
+        if isFavouriteHidden {
             favoriteIndicatorImageView.isHidden = true
         } else {
             favoriteIndicatorImageView.isHidden = false

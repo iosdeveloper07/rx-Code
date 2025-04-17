@@ -15,7 +15,7 @@ class PostsViewController: UIViewController {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
 
     private var postStorage: PostStorageProtocol = DatabaseService.shared
-    private var viewModel = PostsViewModel()
+    private var viewModel: PostsViewModel!
     private let disposeBag = DisposeBag()
     private let refreshControl = UIRefreshControl()
 
@@ -41,8 +41,8 @@ class PostsViewController: UIViewController {
     }
 
     private func setupTableView() {
-         let nib = UINib(nibName: PostTableViewCell.identifier, bundle: nil)
-         tableView.register(nib, forCellReuseIdentifier: PostTableViewCell.identifier)
+        let nib = UINib(nibName: PostTableViewCell.identifier, bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: PostTableViewCell.identifier)
 
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 100.0 

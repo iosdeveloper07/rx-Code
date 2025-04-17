@@ -15,7 +15,8 @@ class FavoritesViewController: UIViewController {
     @IBOutlet weak var emptyStateLabel: UILabel!
 
     private var postStorage: PostStorageProtocol = DatabaseService.shared
-    private var viewModel = FavoritesViewModel()
+
+    private var viewModel: FavoritesViewModel!
     private let disposeBag = DisposeBag()
     
     func inject(postStorage: PostStorageProtocol) {
@@ -58,7 +59,7 @@ class FavoritesViewController: UIViewController {
         viewModel.favoritePosts
             .observe(on: MainScheduler.instance)
             .bind(to: tableView.rx.items(cellIdentifier: PostTableViewCell.identifier, cellType: PostTableViewCell.self)) { (row, post, cell) in
-                cell.configure(with: post, isFavourite: true)
+                cell.configure(with: post, isFavouriteHidden: true)
             }
             .disposed(by: disposeBag)
         
